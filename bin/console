@@ -4,16 +4,16 @@ require "bundler/setup"
 require "houston_symphony_concert_CLI"
 require_relative "../config/environment"
 require "pry"
-Pry.start
-
 require "irb"
-IRB.start(__FILE__)
 
 
 puts "Welcome to the Program! Wait momentarily for the Concert Schedule to populate."
 concert_url = 'https://houstonsymphony.org/tickets/concerts/'
+puts "What would you like to do?"
+
 Console.first_four_concerts(concert_url)
 
 puts "Please select a concert date for more details."
 input = gets.to_i
+
 Console.display_full_details(input)

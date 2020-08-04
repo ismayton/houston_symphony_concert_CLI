@@ -1,8 +1,8 @@
 # HoustonSymphonyConcertCLI
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/houston_symphony_concert_CLI`. To experiment with that code, run `bin/console` for an interactive prompt.
+Hello World!
 
-TODO: Delete this and the text above, and describe your gem
+This gem takes concert information from the Houston Symphony website 'https://houstonsymphony.org/tickets/concerts/' and creates a clear and simple interface for browsing the upcoming programs. In addition, the program collects the pieces on each program under a composer, allowing the user to search every upcoming concert for their favorite composer.
 
 ## Installation
 

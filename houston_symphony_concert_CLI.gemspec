@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["'Ian Mayton'"]
   spec.email         = ["'ian.mayton@gmail.com'"]
 
-  spec.summary       = %q{'Symphony concert finder.'}
-  spec.description   = %q{'Finds Symphony Concerts.'}
+  spec.summary       = %q{'Houston Symphony Upcoming Concerts.'}
+  spec.description   = %q{'Scrapes the Houston Symphony website for upcoming program information.'}
   spec.homepage      = "https://github.com/ismayton/houston_symphony_concert_CLI"
   spec.license       = "MIT"
 

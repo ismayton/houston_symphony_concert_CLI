@@ -22,7 +22,11 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To start the program: Make sure you are in directory houston_symphony_concert_CLI
+
+    $ bin/console 
+    
+Follow the console prompts to navigate options.
 
 ## Development
 

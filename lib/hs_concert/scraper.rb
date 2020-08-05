@@ -2,7 +2,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'pry'
 
-class Scraper 
+class HoustonSymphonyConcertCLI::Scraper 
 
   def self.scrape_concerts_page(concert_url)
     array = []

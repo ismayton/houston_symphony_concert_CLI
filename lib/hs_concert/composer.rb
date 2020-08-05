@@ -1,4 +1,4 @@
-class Houston_symphony_concert_CLI::Composer
+class HoustonSymphonyConcertCLI::Composer
   attr_accessor :name
   
   @@all = []
@@ -33,7 +33,7 @@ class Houston_symphony_concert_CLI::Composer
   def add_piece(piece)
     if !@pieces.include?(piece)
       @pieces << piece
-    if piece.composer.class != Composer
+    if piece.composer.class != HoustonSymphonyConcertCLI::Composer
         piece.composer = self
       end
     end 

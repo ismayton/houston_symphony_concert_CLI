@@ -1,11 +1,11 @@
-class Houston_symphony_concert_CLI::Piece
+class HoustonSymphonyConcertCLI::Piece
   attr_accessor :title, :composer
   
   @@all = []
   
   def initialize(title, composer = nil)
     @title = title
-    if composer.class == Composer
+    if composer.class == HoustonSymphonyConcertCLI::Composer
       @composer = composer
       composer.add_piece(self)
     end
@@ -13,7 +13,7 @@ class Houston_symphony_concert_CLI::Piece
   end
   
   def composer=(composer)
-    if composer.class == Composer 
+    if composer.class == HoustonSymphonyConcertCLI::Composer 
       @composer = composer
       if !composer.pieces.include?(self)
         composer.pieces << self 

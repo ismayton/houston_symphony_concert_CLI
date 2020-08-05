@@ -1,6 +1,6 @@
 require 'pry'
 
-class Houston_symphony_concert_CLI::Concert
+class HoustonSymphonyConcertCLI::Concert
   attr_accessor :title, :date, :description
   
   @@all = []
@@ -33,14 +33,14 @@ class Houston_symphony_concert_CLI::Concert
     
     title = info_hash[:title]
     date = info_hash[:date]
-    concert = Concert.new(title, date)
+    concert = HoustonSymphonyConcertCLI::Concert.new(title, date)
     program_url = info_hash[:program_url]
-    concert.description = Scraper.scrape_description(program_url)
+    concert.description = HoustonSymphonyConcertCLI::Scraper.scrape_description(program_url)
     
-    concert_details = Scraper.scrape_program_page(program_url)
+    concert_details = HoustonSymphonyConcertCLI::Scraper.scrape_program_page(program_url)
     concert_details.each do |music|
-      composer = Composer.find_or_create_by_name(music[:composer])
-      piece = Piece.new(music[:title], composer)
+      composer = HoustonSymphonyConcertCLI::Composer.find_or_create_by_name(music[:composer])
+      piece = HoustonSymphonyConcertCLI::Piece.new(music[:title], composer)
       concert.composers << composer 
       concert.pieces << piece
     end 

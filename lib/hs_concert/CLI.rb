@@ -1,11 +1,11 @@
-class Houston_symphony_concert_CLI::CLI
+class HoustonSymphonyConcertCLI::CLI
   
   def self.first_four_concerts(concert_url)
-    array = Scraper.scrape_concerts_page(concert_url)
+    array = HoustonSymphonyConcertCLI::Scraper.scrape_concerts_page(concert_url)
     counter = 0
     @ordered = {}
     while counter < 4 do
-      concert = Concert.new_from_hash(array[counter])
+      concert = HoustonSymphonyConcertCLI::Concert.new_from_hash(array[counter])
       counter += 1
       @ordered[counter] = concert
       puts "#{counter}. #{concert.date}"

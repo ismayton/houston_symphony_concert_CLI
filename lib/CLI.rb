@@ -1,4 +1,4 @@
-class Houston_symphony_concert_CLI::Console
+class CLI
   
   def self.first_four_concerts(concert_url)
     array = Scraper.scrape_concerts_page(concert_url)

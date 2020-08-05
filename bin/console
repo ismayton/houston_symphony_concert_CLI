@@ -10,9 +10,9 @@ require "irb"
 puts "Welcome to the Program! Wait momentarily for the Concert Schedule to populate."
 concert_url = 'https://houstonsymphony.org/tickets/concerts/'
 
-Console.first_four_concerts(concert_url)
+CLI.first_four_concerts(concert_url)
 
 puts "Please select a concert date for more details."
 input = gets.to_i
 
-Console.display_full_details(input)
+CLI.display_full_details(input)

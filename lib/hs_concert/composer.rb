@@ -40,7 +40,7 @@ class HoustonSymphonyConcertCLI::Composer
   end 
   
   def self.find_by_name(name) 
-    self.all.detect {|artist| artist.name === name}
+    self.all.detect {|composer| composer.name === name}
   end
     
   

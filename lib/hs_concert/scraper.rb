@@ -22,7 +22,9 @@ class HoustonSymphonyConcertCLI::Scraper
   
   def self.scrape_description(program_url)
     doc = Nokogiri::HTML(open(program_url))
-    description = doc.css('.concert-description-wrapper.blocks p')[2].text
+    if doc.css('.concert-description-wrapper.blocks p')[2] != nil
+      description = doc.css('.concert-description-wrapper.blocks p')[2].text
+    end 
   end 
   
   def self.scrape_program_page(program_url)

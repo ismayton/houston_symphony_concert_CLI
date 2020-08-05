@@ -3,7 +3,7 @@ class HoustonSymphonyConcertCLI::CLI
   def initialize
     puts "Please wait while the season is loaded."
     @concert_url = "https://houstonsymphony.org/tickets/concerts/"
-    scrape_all_concerts(@concert_url)
+    scrape_four_concerts(@concert_url)
     
     @programs = []
     
@@ -19,15 +19,18 @@ class HoustonSymphonyConcertCLI::CLI
       puts "Option 1"
       display_full_details(1)
       restart_or_quit
+    
     elsif input == 2 
       scrape_four_programs(@all_concerts)
       puts "Choose a concert for full details."
       input = gets.to_i
       display_full_details(input)
+    
     elsif input == 3 
       scrape_all_programs(HoustonSymphonyConcertCLI::Concert.all)
       puts "Enter Composer Name"
       input = gets.capitalize.chomp
+      puts "The following concerts include a piece by #{input}"
       search_by_composer(input)
     end
     
@@ -52,6 +55,16 @@ class HoustonSymphonyConcertCLI::CLI
     end 
   end 
   
+  def scrape_four_concerts(concert_url)
+    counter = 0
+    all_concerts = HoustonSymphonyConcertCLI::Scraper.scrape_concerts_page(concert_url)
+     while counter < 4
+      concert = HoustonSymphonyConcertCLI::Concert.concert_from_hash(all_concerts[counter])
+      puts concert.date
+      counter += 1 
+    end
+  end 
+  
   def scrape_all_programs(array)
     array.each do |program_hash|
       concert = HoustonSymphonyConcertCLI::Concert.new_from_hash(program_hash)
@@ -72,7 +85,8 @@ class HoustonSymphonyConcertCLI::CLI
 
   def display_full_details(input)
 
-    returned = @all_concerts[input - 1]
+    returned = HoustonSymphonyConcertCLI::Concert.all[0]
+    binding.pry
     puts "----------------------"
     puts "Date: #{returned.date}"
     puts "----------------------"

@@ -2,7 +2,7 @@ class HoustonSymphonyConcertCLI::Composer
   attr_accessor :name
   
   @@all = []
-  
+
   def initialize(name)
     @name = name 
     @pieces = []

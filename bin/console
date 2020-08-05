@@ -9,7 +9,6 @@ require "irb"
 
 puts "Welcome to the Program! Wait momentarily for the Concert Schedule to populate."
 concert_url = 'https://houstonsymphony.org/tickets/concerts/'
-puts "What would you like to do?"
 
 Console.first_four_concerts(concert_url)
 

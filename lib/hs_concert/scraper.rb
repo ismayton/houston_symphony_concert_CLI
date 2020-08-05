@@ -27,15 +27,25 @@ class HoustonSymphonyConcertCLI::Scraper
     end 
   end 
   
+  ### Weird formatting for some pages, need a flow control and secondary scrape setup for tg-bold composer name and following text
+  
+  ### Find a way to scrape piece name 
+  ### find flow control for scrape between format types
+  
+  ### details = doc.css('.col-md-5') - remove the p
+  ### details.css('p .tg-bold')[0].text = Handel/L. Shaw
+  ### How to get the piece name?
+  
   def self.scrape_program_page(program_url)
     concert_details = []
     doc = Nokogiri::HTML(open(program_url))
     details = doc.css('.col-md-5 p')
-
+    
     details.each do |piece|
       composer_array = piece.css('.tg-bold').text.split(' ').collect {|word| word.capitalize}
       composer = composer_array.join(' ')
       title = piece.css('b').text
+      binding.pry
       detail_hash = {}
 
       if composer != ''
@@ -54,6 +64,4 @@ class HoustonSymphonyConcertCLI::Scraper
   
 end 
 
-#program_url = "https://houstonsymphony.org/tickets/concerts/live-from-jones-hall-august-15/"
-#concert_details = Scraper.scrape_program_page(program_url)
-#binding.pry
+

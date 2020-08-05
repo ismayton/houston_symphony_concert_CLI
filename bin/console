@@ -5,4 +5,9 @@ require_relative "../lib/houston_symphony_concert_CLI.rb"
 require "pry"
 require "irb"
 
+program_url = "https://houstonsymphony.org/tickets/concerts/live-from-jones-hall-august-15/"
+concert_details = HoustonSymphonyConcertCLI::Scraper.scrape_program_page(program_url)
+binding.pry
+
+
 HoustonSymphonyConcertCLI::CLI.new

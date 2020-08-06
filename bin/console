@@ -7,7 +7,7 @@ require "irb"
 
 program_url = "https://houstonsymphony.org/tickets/concerts/live-from-jones-hall-august-15/"
 concert_details = HoustonSymphonyConcertCLI::Scraper.scrape_program_page(program_url)
-binding.pry
+puts concert_details
 
 
 HoustonSymphonyConcertCLI::CLI.new

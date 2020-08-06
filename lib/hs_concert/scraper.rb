@@ -30,9 +30,7 @@ class HoustonSymphonyConcertCLI::Scraper
   ### Weird formatting for some pages, need a flow control and secondary scrape setup for tg-bold composer name and following text
   
   ### Find a way to scrape piece name 
-  ### find flow control for scrape between format types
-  
-  ### details = doc.css('.col-md-5') - remove the p
+
   ### details.css('p .tg-bold')[0].text = Handel/L. Shaw
   ### How to get the piece name?
   
@@ -41,24 +39,44 @@ class HoustonSymphonyConcertCLI::Scraper
     doc = Nokogiri::HTML(open(program_url))
     details = doc.css('.col-md-5 p')
     
-    details.each do |piece|
-      composer_array = piece.css('.tg-bold').text.split(' ').collect {|word| word.capitalize}
-      composer = composer_array.join(' ')
-      title = piece.css('b').text
-      binding.pry
-      detail_hash = {}
-
-      if composer != ''
-        detail_hash[:composer] = composer
+    binding.pry
+    
+    if details.css('b').text != []
+      details.each do |piece|
+        composer_array = piece.css('.tg-bold').text.split(' ').collect {|word| word.capitalize}
+        composer = composer_array.join(' ')
+        title = piece.css('b').text
+        detail_hash = {}
+  
+        if composer != ''
+          detail_hash[:composer] = composer
+        end
+        if title != ''
+          detail_hash[:title] = title
+        end 
+        
+        if detail_hash != {}
+          concert_details << detail_hash
+        end 
       end
-      if title != ''
-        detail_hash[:title] = title
+      
+    else
+      composers = doc.css('.col-md-5 .tg-bold')
+      details.each do |piece|
+        composer_array = piece.text.split(' ').collect {|word| word.capitalize}
+        composer = composer_array.join(' ')
+        
+        binding.pry
+        
+        if composer != ''
+          detail_hash[:composer] = composer
+        end
       end 
       
       if detail_hash != {}
         concert_details << detail_hash
       end 
-    end
+    end 
     concert_details
   end
   

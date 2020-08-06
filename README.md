@@ -26,7 +26,9 @@ To start the program: Make sure you are in directory houston_symphony_concert_CL
 
     $ bin/console 
     
-Follow the console prompts to navigate options.
+Choose whether to scrape the next 4 concerts or the entire remaining season. (an entire season scrape takes up to one minute)
+Choose to see the next upcoming concert's details, a list of all concert dates, or search all concerts for a composer.
+Enjoy!
 
 ## Development
 

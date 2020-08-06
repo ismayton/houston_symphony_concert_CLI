@@ -39,9 +39,7 @@ class HoustonSymphonyConcertCLI::Scraper
     doc = Nokogiri::HTML(open(program_url))
     details = doc.css('.col-md-5 p')
     
-    binding.pry
-    
-    if details.css('b').text != []
+    if details.css('b').text != ''
       details.each do |piece|
         composer_array = piece.css('.tg-bold').text.split(' ').collect {|word| word.capitalize}
         composer = composer_array.join(' ')
@@ -62,19 +60,17 @@ class HoustonSymphonyConcertCLI::Scraper
       
     else
       composers = doc.css('.col-md-5 .tg-bold')
-      details.each do |piece|
+      composers.each do |piece|
         composer_array = piece.text.split(' ').collect {|word| word.capitalize}
         composer = composer_array.join(' ')
-        
-        binding.pry
-        
+        detail_hash = {}
         if composer != ''
           detail_hash[:composer] = composer
+          detail_hash{:title] = "Error"
         end
-      end 
-      
-      if detail_hash != {}
-        concert_details << detail_hash
+        if detail_hash != {}
+          concert_details << detail_hash
+        end
       end 
     end 
     concert_details

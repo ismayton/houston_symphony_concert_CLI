@@ -8,53 +8,53 @@ class HoustonSymphonyConcertCLI::Scraper
     array = []
     doc = Nokogiri::HTML(open(concert_url))
     concerts = doc.css('.grid-item_content')
-    
     concerts.each do |concert|
-      info_hash = {
-        :date => concert.css('.grid-sub').text,
-        :title => concert.css('.entry-title.grid-title').text,
-        :program_url => concert.css('.entry-title.grid-title [href]')[0]['href']
-      }
-      array << info_hash
-    end 
+      date = concert.css('.grid-sub').text
+      title = concert.css('.entry-title.grid-title').text
+      program_url = concert.css('.entry-title.grid-title [href]')[0]['href']
+      concert = HoustonSymphonyConcertCLI::Concert.concert_from_info(title, date, program_url)
+      array << concert
+    end
     array
-  end 
+  end
   
-  def self.scrape_description(program_url)
-    doc = Nokogiri::HTML(open(program_url))
-    if doc.css('.concert-description-wrapper.blocks p')[2] != nil
-      description = doc.css('.concert-description-wrapper.blocks p')[2].text
-    end 
-  end 
+  def self.scrape_four_concerts_page(concert_url)
+    array = []
+    doc = Nokogiri::HTML(open(concert_url))
+    concerts = doc.css('.grid-item_content')
+    counter = 0
+    while counter < 4 do
+      date = concerts[counter].css('.grid-sub').text
+      title = concerts[counter].css('.entry-title.grid-title').text
+      program_url = concerts[counter].css('.entry-title.grid-title [href]')[0]['href']
+      concert = HoustonSymphonyConcertCLI::Concert.concert_from_info(title, date, program_url)
+      array << concert
+      counter += 1
+    end
+    array
+  end
   
-  ### Weird formatting for some pages, need a flow control and secondary scrape setup for tg-bold composer name and following text
-  
-  ### Find a way to scrape piece name 
-
-  ### details.css('p .tg-bold')[0].text = Handel/L. Shaw
   ### How to get the piece name?
   
-  def self.scrape_program_page(program_url)
-    concert_details = []
-    doc = Nokogiri::HTML(open(program_url))
+  def self.scrape_program_page(concert)
+    doc = Nokogiri::HTML(open(concert.program_url))
+    if doc.css('.concert-description-wrapper.blocks p')[2] != nil
+      concert.description = doc.css('.concert-description-wrapper.blocks p')[2].text
+    end
     details = doc.css('.col-md-5 p')
-    
     if details.css('b').text != ''
       details.each do |piece|
         composer_array = piece.css('.tg-bold').text.split(' ').collect {|word| word.capitalize}
-        composer = composer_array.join(' ')
+        composer_name = composer_array.join(' ')
         title = piece.css('b').text
-        detail_hash = {}
-  
-        if composer != ''
-          detail_hash[:composer] = composer
+        if composer_name != ''
+          composer = HoustonSymphonyConcertCLI::Composer.find_or_create_by_name(composer_name)
+          concert.composers << composer
         end
         if title != ''
-          detail_hash[:title] = title
-        end 
-        
-        if detail_hash != {}
-          concert_details << detail_hash
+          piece = HoustonSymphonyConcertCLI::Piece.new(title, composer)
+          composer.add_piece(piece)
+          concert.pieces << piece
         end 
       end
       
@@ -62,18 +62,13 @@ class HoustonSymphonyConcertCLI::Scraper
       composers = doc.css('.col-md-5 .tg-bold')
       composers.each do |piece|
         composer_array = piece.text.split(' ').collect {|word| word.capitalize}
-        composer = composer_array.join(' ')
-        detail_hash = {}
-        if composer != ''
-          detail_hash[:composer] = composer
-          detail_hash{:title] = "Error"
-        end
-        if detail_hash != {}
-          concert_details << detail_hash
+        composer_name = composer_array.join(' ')
+        if composer_name != ''
+          composer = HoustonSymphonyConcertCLI::Composer.find_or_create_by_name(composer_name)
+          concert.composers << composer
         end
       end 
-    end 
-    concert_details
+    end
   end
   
 end 

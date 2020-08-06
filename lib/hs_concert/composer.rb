@@ -30,6 +30,10 @@ class HoustonSymphonyConcertCLI::Composer
     @pieces.clear
   end 
   
+  def self.clear 
+    @@all.clear 
+  end 
+  
   def add_piece(piece)
     if !@pieces.include?(piece)
       @pieces << piece

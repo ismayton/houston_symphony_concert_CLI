@@ -8,18 +8,19 @@ class HoustonSymphonyConcertCLI::CLI
     puts "2. Load entire remaining season"
     puts "3. Quit"
     input = gets.to_i
-    puts "Please wait while the season is loaded."
     if input == 1 
+      puts "Please wait while the next 4 concerts are loaded."
       scrape_four_concerts(@concert_url)
       main_menu
     elsif input == 2 
+      puts "Please wait while the season is loaded."
       scrape_all_concerts(@concert_url)
       main_menu
     else 
       puts "Goodbye!"
     end 
   end 
-  
+
   def main_menu
     puts "----------------------"
     puts "Welcome to the Houston Symphony Concert CLI! Please choose an option below."
@@ -48,7 +49,6 @@ class HoustonSymphonyConcertCLI::CLI
     elsif input == 3 
       puts "Enter Composer Name"
       input = gets.capitalize.chomp
-      puts "The following concerts include a piece by #{input}:"
       search_by_composer(input)
       restart_or_quit
       
@@ -68,64 +68,33 @@ class HoustonSymphonyConcertCLI::CLI
     end
   end 
    
-  ###Concert Scraping 
+   
+  #Concert Scraping 
 
   def scrape_all_concerts(concert_url)
     all_concerts = HoustonSymphonyConcertCLI::Scraper.scrape_concerts_page(concert_url)
-    all_concerts.each do |info_hash|
-      concert = HoustonSymphonyConcertCLI::Concert.concert_from_hash(info_hash)
-      HoustonSymphonyConcertCLI::Concert.program_from_url(concert)
+    all_concerts.each do |concert|
+      HoustonSymphonyConcertCLI::Concert.program_from_concert(concert)
       puts "#{concert.date}: Complete."
     end 
   end 
   
   def scrape_four_concerts(concert_url)
     counter = 0
-    all_concerts = HoustonSymphonyConcertCLI::Scraper.scrape_concerts_page(concert_url)
-     while counter < 4
-      concert = HoustonSymphonyConcertCLI::Concert.concert_from_hash(all_concerts[counter])
-      HoustonSymphonyConcertCLI::Concert.program_from_url(concert)
-      puts "#{concert.date}: Complete."
+    four_concerts = HoustonSymphonyConcertCLI::Scraper.scrape_four_concerts_page(concert_url)
+    while counter < 4
+      HoustonSymphonyConcertCLI::Concert.program_from_concert(four_concerts[counter])
+      puts "#{four_concerts[counter].date}: Complete."
       counter += 1 
     end
   end 
-  
-  ####program scraping
-  
-  def program(input)
-    index = input.to_i - 1
-    concert = HoustonSymphonyConcertCLI::Concert.all[index]
-    HoustonSymphonyConcertCLI::Concert.program_from_url(concert)
-    puts "Scraped: #{concert.date}"
-  end 
-  
 
-  ###Display 
+
+  #Display 
   
   def display_full_details(input)
     index = input.to_i - 1
-    returned = HoustonSymphonyConcertCLI::Concert.all[index]
-    puts "----------------------"
-    puts "Date: #{returned.date}"
-    puts "----------------------"
-    puts "#{returned.description}"
-    puts "----------------------"
-    puts "Program:"
-    
-    returned.composers.each do |composer|
-      puts "Composer: #{composer.name}"
-      returned.pieces.each do |piece|
-        if piece.composer == composer 
-          if piece.title != nil
-            puts "  #{piece.title}"
-            puts ""
-          else
-            puts "  TBD"
-            puts ""
-          end 
-        end
-      end
-    end
+    HoustonSymphonyConcertCLI::Concert.all[index].details
   end
   
   #Search Composer 
@@ -133,19 +102,35 @@ class HoustonSymphonyConcertCLI::CLI
   def search_by_composer(name)
     composer = HoustonSymphonyConcertCLI::Composer.find_by_name(name)
     array = []
-    counter = 1
     HoustonSymphonyConcertCLI::Concert.all.each do |concert|
       if concert.composers.include?(composer)
-        puts "#{counter}. #{concert.date}"
         array << concert
+      end
+    end
+    
+    if array.size == 0
+      puts "No concerts found."
+      return 
+    else 
+      counter = 1
+      puts "Choose a concert for full details."
+      array.each do |concert|
+        puts "#{counter}. #{concert.date}"
         counter += 1
       end 
-    end
-    if array == []
-      puts "No concerts found."
+      puts "#{counter}. Return to Main Menu"
+      puts "#{counter + 1}. Quit"
+      input = gets.to_i
+      index = input - 1
+      if index < array.size  
+        array[index].details
+      elsif input == counter 
+        main_menu
+      elsif input == counter + 1
+        puts "Goodbye!"
+        return
+      end
     end 
-    puts ""
   end 
   
-
 end 

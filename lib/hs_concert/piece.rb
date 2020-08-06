@@ -28,4 +28,24 @@ class HoustonSymphonyConcertCLI::Piece
   def self.all 
     @@all 
   end
+  
+  def self.clear 
+    @@all.clear 
+  end 
+  
+  def self.find_by_name(name) 
+    self.all.detect {|composer| composer.name === name}
+  end
+    
+  
+  def self.find_or_create_by_name(name)
+    result = self.find_by_name(name)
+    if result != nil
+      return result
+    else 
+      result = self.new(name)
+    end
+    result
+  end
+  
 end 

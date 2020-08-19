@@ -94,19 +94,39 @@ class HoustonSymphonyConcertCLI::CLI
   
   def display_full_details(input)
     index = input.to_i - 1
-    HoustonSymphonyConcertCLI::Concert.all[index].details
+    concert = HoustonSymphonyConcertCLI::Concert.all[index]
+    details(concert)
   end
   
+  def details(concert) 
+    puts "----------------------"
+    puts "Date: #{concert.date}"
+    puts "----------------------"
+    puts "#{concert.description}"
+    puts "----------------------"
+    puts "Program:"
+    
+    concert.composers.each do |composer|
+      puts "Composer: #{composer.name}"
+      concert.pieces.each do |piece|
+        if piece.composer == composer 
+          if piece.title != nil
+            puts "  #{piece.title}"
+            puts ""
+          else
+            puts "  TBD"
+            puts ""
+          end 
+        end
+      end
+    end
+  end
+
   #Search Composer 
   
   def search_by_composer(name)
     composer = HoustonSymphonyConcertCLI::Composer.find_by_name(name)
-    array = []
-    HoustonSymphonyConcertCLI::Concert.all.each do |concert|
-      if concert.composers.include?(composer)
-        array << concert
-      end
-    end
+    array = HoustonSymphonyConcertCLI::Concert.all.select {|concert| concert.composers.include?(composer)}
     
     if array.size == 0
       puts "No concerts found."
